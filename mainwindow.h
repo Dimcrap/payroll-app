@@ -21,5 +21,6 @@ private:
     Ui::MainWindow *ui;
 };
 
+QString s
 
 #endif // MAINWINDOW_H
