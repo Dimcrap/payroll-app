@@ -5,6 +5,7 @@
 #include <QSqlError>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QVector>
 
 enum class salary_type{
     weekly=1,
@@ -41,6 +42,19 @@ struct Userdata{
     }
 };
 
+struct taxdetails{
+    int employee_id ;
+    double employer_cost;
+    double socialsec ;
+    double medicare ;
+
+    taxdetails(const int &  id,const double emcost,
+               const double & socialsecureity,const double & medcare):
+        employee_id(id),employer_cost(emcost),socialsec(socialsecureity),
+        medicare(medcare){}
+};
+
+inline
 class DatabaseHandler:public QObject{
 
     Q_OBJECT
@@ -51,10 +65,10 @@ public:
 
     public slots:
     void addEmployee(const QString &name);
-    void loadallEmployees();
+    QVector<Userdata> loadallEmployees();
     void backupdb(const QString &backupFilePath);
     int adduserdata(const Userdata &userdatas);
-    bool addusertaxes(int user_id);
+    bool addusertaxes(taxdetails & usertax);
 
     signals:
     void employeeAdded(bool success,const QString &error="");

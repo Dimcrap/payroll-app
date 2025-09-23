@@ -12,9 +12,9 @@ DatabaseHandler::DatabaseHandler(const QString &pathtodb,QObject *parent=nullptr
         QString error=m_db.lastError().text();
         //qCritical()<<"Failed to open databas:"<<error;
         emit databaseError(error);
-    };/*else{
+    }else{
         qDebug("db opened successfully")
-    };*/
+    }
 
 }
 
@@ -22,9 +22,9 @@ void DatabaseHandler::backupdb(const QString &backupFilePath){
 
     QSqlDatabase db= QSqlDatabase::database();
 
-    db.transaction()
+    db.transaction();
 
-        QSqlDriver *driver=db.driver();
+        QSqlDriver *driver =db.driver();
     if(!driver){
         qCritical<<"faild to open driver";
         db.rollback();
@@ -34,7 +34,8 @@ void DatabaseHandler::backupdb(const QString &backupFilePath){
 
     Qstring connectionName ="backup_connection";
 
-    QSqlDatabase backup=QSqlDatabase::addDatabase("QSQLITE",connectionName);
+    QSqlDatabase backup=
+    QSqlDatabase::addDatabase("QSQLITE",connectionName);
     backup.setDatabaseName(backupFilePath);
 
     if(!backup.open()){
@@ -80,14 +81,10 @@ void DatabaseHandler::backupdb(const QString &backupFilePath){
 
     db.rollback();
 
-    qinfo<<"Database backup successful:"<<backupFilePath;
+    qinfo<<"Database backup successful:"<
+        <backupFilePath;
     return true;
 }
-
-
-
-
-
 
 bool DatabaseHandler::isOpen() const{
     return m_db.isOpen();
@@ -95,13 +92,20 @@ bool DatabaseHandler::isOpen() const{
 
     int DatabaseHandler::adduserdata(const Userdata &userdatas){
     QSqlQuery query;
-    query.prepare("INSERT INTO employee (name ...)"
-                  "VALUES (:username,)");
+    query.prepare("INSERT INTO employee (name,gender,birthdate"
+                  "pos,phone,salaryform,salary_amount,hire_date)"
+                  "VALUES (:sername,:gender,:birthdat,:pos,:phone,"
+                  ":salaryform,:salary_amount,:hire_date)");
 
     query.bindValue(":name",userdatas.name);
-    .
-    .
-    .
+    query.bindValue(":gender",userdatas.name);
+    query.bindValue(":birthdate",birthdate);
+    query.bindValue(":pos",pos);
+    query.bindValue("phone",phone);
+    query.bindValue(":salaryform",salaryform);
+    query.bindValue(":salary_amount",salary_amount);
+    query.bindValue(":hire_date",hire_date);
+
 
         if(!query.exec()){
         qCritical<<"Inserting data failed:"<<query.lastError().text();
@@ -111,10 +115,35 @@ bool DatabaseHandler::isOpen() const{
     return query.lastInsertId().toInt();
     }
 
-    bool addusertaxes(int user_id){
-        if(user_id==-1){
-            really badshit happen
+    bool addusertaxes(taxdetails & usertax){
+        QSqlQuery query;
+        query.prepare("INSERT INTO tax(employee_id,emoployer_cost,"
+                      "social,medicare)"
+                      "VALUES(:employee_id,:emoployer_cost,:social,:medicare)");
+        query.bindValue(":employee_id",employee_id);
+        query.bindValue(":emoployer_cost",emoployer_cost);
+        query.addBindValue(":social",social);
+        query.addBindValue(":medicare",medicare);
+
+        if(!query.exec()){
+            qCritical<<"couldn't register tax information:"<<query.lastError().text();
+            return -1;
         }
+
+    }
+    QVector<Userdata> loadallEmployees(){
+        QVector <Userdata>allusers;
+        QSqlQuery query;
+
+        QString sql="SELECT * FROM employee";
+        if(query.exec(sql)){
+            qCritical<<"could't load all employees"<<query.lastError().text();
+            return allusersll;
+        }
+
+        while(query.next()){
+
+        }
+
     };
-    void DatabaseHandler::addEmployee(const QString &name);
-    void DatabaseHandler::loadallEmployees();
+

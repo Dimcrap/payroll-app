@@ -18,7 +18,7 @@ hire_date DATE
 
 
 CREATE TABLE tax(
-employee_id INTEGER PRIMARY KEY,
+employee_id INTEGER PRIMARY KEY AUTOINCREMENT,
 emoployer_cost NUMERIC NOT NULL,
 social NUMERIC,
 medicare NUMERIC,
