@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools  Sql)
+find_package(SQLite3 REQUIRED)
 
 set(TS_FILES payroll-system_fa_IR.ts)
 
@@ -18,17 +19,25 @@ set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         DatabaseHandler.cpp
-        ${TS_FILES}
+        userdata.cpp
 )
 set(PROJECT_FORMS
         mainwindow.ui
         # Add other .ui files for other dialogs here later
 )
+set(PROJECT_HEADERS  # ← Add headers separately if needed for MOC
+        DatabaseHandler.h
+        mainwindow.h
+        userdata.h
+)
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(payroll-system
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        data/1-createtable.sql data/2-seedingdatabase data/payroll.db
+        ${PROJECT_FORMS}
+        ${PROJECT_HEADERS}
+        addemployeewindow.h addemployeewindow.cpp
+        allemployees.h allemployees.cpp
     )
 
   add_custom_command(TARGET payroll-system POST_BUILD
@@ -66,7 +75,9 @@ endif()
 
 target_link_libraries(payroll-system PRIVATE
   Qt${QT_VERSION_MAJOR}::Widgets
-  Qt${QT_VERSION_MAJOR}::Sql)
+  Qt${QT_VERSION_MAJOR}::Sql
+  SQLite::SQLite3
+)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

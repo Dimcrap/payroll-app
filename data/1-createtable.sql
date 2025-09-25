@@ -1,5 +1,5 @@
-DROP IF EXIST employee;
-DROP IF EXIST tax;
+DROP TABLE IF EXISTS employee;
+DROP TABLE IF EXISTS tax;
 
 
 
@@ -7,11 +7,12 @@ CREATE TABLE  employee(
 ID INTEGER PRIMARY KEY AUTOINCREMENT,
 name TEXT NOT NULL ,
 gender char(6),
-marital-status char(8),
-position VARCHAR(100) ,
+marital_status char(8),
+position VARCHAR(40) ,
 phone VARCHAR(10) ,
 salaryform char(18) NOT NULL,
 salaryamount  DECIMAL(11,2),
+birth_date DATE,
 hire_date DATE
 );
 
