@@ -18,10 +18,23 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    void esizeEvent(QResizeEvent *event);
+
     ~MainWindow();
+private slots:
+    void onAddEmployeeClicked();
+    void onViewEmployeeClicked();
 
 private:
     Ui::MainWindow *ui;
+
+    addemployeewindow *m_addemployeewindow;
+    allemployees * m_allemployeeswindow;
+
+    void setupConnections();
+protected:
+    void keyPressEvent(QKeyEvent * event) override;
+    void resizeEvent(QResizeEvent *event);
 };
 
 

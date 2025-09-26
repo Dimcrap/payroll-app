@@ -1,10 +1,22 @@
 #ifndef ADDEMPLOYEEWINDOW_H
 #define ADDEMPLOYEEWINDOW_H
 
-class addemployeewindow
+#include <QWidget>
+
+namespace Ui {
+class addemployeewindow;
+}
+
+class addemployeewindow : public QWidget
 {
+    Q_OBJECT
+
 public:
-    addemployeewindow();
+    explicit addemployeewindow(QWidget *parent = nullptr);
+    ~addemployeewindow();
+
+private:
+    Ui::addemployeewindow *ui;
 };
 
 #endif // ADDEMPLOYEEWINDOW_H

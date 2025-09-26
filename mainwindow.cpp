@@ -5,12 +5,22 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QMessageBox>
+#include <QWidget>
+#include <QFile>
+#include <QKeyEvent>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    ,m_addemployeewindow(nullptr)
+    ,m_allemployeeswindow(nullptr)
 {
     ui->setupUi(this);
+
+    setupConnections();
+
+    //setWindowTitle("Payroll System");
 }
 
 MainWindow::~MainWindow()
@@ -18,6 +28,62 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::setupConnections()
+{
+    connect(ui->addEmployeeButton,&QPushButton::clicked,
+            this,&MainWindow::onAddEmployeeClicked);
+    connect(ui->viewEmployeesButton,&QPushButton::clicked,
+            this,&MainWindow::onViewEmployeeClicked);
+}
+
+void MainWindow::onAddEmployeeClicked()
+{
+    if(!m_addemployeewindow){
+        m_addemployeewindow=new addemployeewindow(this);
+    }
+    m_addemployeewindow->show();
+    m_addemployeewindow->raise();
+    m_addemployeewindow->activateWindow();
+}
+
+void MainWindow::onViewEmployeeClicked()
+{
+    if (!m_allemployeeswindow) {
+        m_allemployeeswindow = new allemployees(this);  // 'this' makes it a child
+    }
+
+    m_allemployeeswindow->show();
+    m_allemployeeswindow->raise();
+    m_allemployeeswindow->activateWindow();
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event){
+    QMainWindow::resizeEvent(event);
+
+    is(isFullScreen()){
+        //int centerx=width/2-ui->viewEmployeesButton->width()/2 ;
+        int rightmargin=50;
+        int buttonX=width()-ui->viewEmployeesButton->width()-rightmargin;
+
+        ui->viewEmployeesButton->move(buttonX,100);
+        ui->addEmployeeButton->move(centerx,);
+    }
+
+}
+
+void MainWindow::keyPressEvent(QKeyEvent * event){
+    if(event->key() ==Qt::Key_F5){
+        QString sourceDir="C:/programming/cpp/C++/exercise p/payroll-system/";
+        QFile file(sourceDir+"/styles/styles.qss");
+        if(file.open(QFile::ReadOnly|QFile::Text)){
+            QString styleSheet=QLatin1String(file.readAll());
+            qApp->setStyleSheet(styleSheet);
+            file.close();
+             qDebug() << "Stylesheet reloaded!";
+        }
+    }
+     QMainWindow::keyPressEvent(event);
+}
 
 void GlobalErrorHandler::install(){
     qInstallMessageHandler(globalErrorHandler);

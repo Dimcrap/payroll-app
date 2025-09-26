@@ -18,17 +18,25 @@ set(TS_FILES payroll-system_fa_IR.ts)
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
+        mainwindow.h
         DatabaseHandler.cpp
         userdata.cpp
+        allemployees.cpp
+        allemployees.ui
+        addemployeewindow.cpp
+        addemployeewindow.ui
+
 )
 set(PROJECT_FORMS
         mainwindow.ui
         # Add other .ui files for other dialogs here later
 )
 set(PROJECT_HEADERS  # ← Add headers separately if needed for MOC
-        DatabaseHandler.h
-        mainwindow.h
-        userdata.h
+  DatabaseHandler.h
+  mainwindow.h
+  addemployeewindow.h
+  allemployees.h
+  userdata.h
 )
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(payroll-system
@@ -38,6 +46,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_HEADERS}
         addemployeewindow.h addemployeewindow.cpp
         allemployees.h allemployees.cpp
+        data/1-createtable.sql data/payroll.db
+        styles/styles.qss
+        addemployeewindow.ui
+        allemployees.ui
+
     )
 
   add_custom_command(TARGET payroll-system POST_BUILD
@@ -46,11 +59,25 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
       $<TARGET_FILE_DIR:payroll-system>/data
       COMMENT "Copying data directory to build folder"
   )
+
+add_custom_command(TARGET payroll-system POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles
+    $<TARGET_FILE_DIR:payroll-system>/styles
+    COMMENT "Copying styles directory to build folder"
+)
+
 target_sources(payroll-system PRIVATE
     DatabaseHandler.h
     mainwindow.h
+    addemployeewindow.h
+    allemployees.h
+    userdata.h
 )
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/data)
+include_directories(
+  ${CMAKE_CURRENT_SOURCE_DIR}/data
+  ${CMAKE_CURRENT_SOURCE_DIR}/styles
+)
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET payroll-system APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)

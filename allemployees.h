@@ -1,10 +1,23 @@
 #ifndef ALLEMPLOYEES_H
 #define ALLEMPLOYEES_H
+#include <QWidget>
 
-class allemployees
+#include <QWidget>
+
+namespace Ui {
+class allemployees;
+}
+
+class allemployees : public QWidget
 {
+    Q_OBJECT
+
 public:
-    allemployees();
+    explicit allemployees(QWidget *parent = nullptr);
+    ~allemployees();
+
+private:
+    Ui::allemployees *ui;
 };
 
 #endif // ALLEMPLOYEES_H
