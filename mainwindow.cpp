@@ -1,14 +1,17 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "addemployeewindow.h"
-#include "allemployees.h"
+
+
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QMessageBox>
 #include <QWidget>
 #include <QFile>
 #include <QKeyEvent>
-
+#include <QResizeEvent>
+#include <QLayout>
+#include <QMargins>
+#include <QStackedWidget>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,7 +23,34 @@ MainWindow::MainWindow(QWidget *parent)
 
     setupConnections();
 
-    //setWindowTitle("Payroll System");
+    QWidget *orginalCenteralWidget=takeCentralWidget();
+    QStackedWidget *stackedWidget = new QStackedWidget(this);
+    stackedWidget->addWidget(orginalCenteralWidget);
+
+    m_addemployeewindow  =new addemployeewindow(this);
+    stackedWidget->addWidget(m_addemployeewindow);
+    setCentralWidget(stackedWidget);
+
+    QPushButton *addEmployeeButton=findChild<QPushButton *>("addEmployeeButton");
+    if(addEmployeeButton){
+        connect(addEmployeeButton,&QPushButton::clicked,this,[stackedWidget](){
+            stackedWidget->setCurrentIndex(1);
+        });
+    }else {
+        qDebug() << "Button not found! Check the object name.";
+    }
+
+    connect(m_addemployeewindow,&addemployeewindow::backToMain,this,[stackedWidget](){
+        stackedWidget->setCurrentIndex(0);
+    });
+    QPushButton *viewEmployeesButton=findChild<QPushButton*>("viewEmployeesButton");
+
+    if (viewEmployeesButton) {
+        connect(viewEmployeesButton, &QPushButton::clicked,
+                this, &MainWindow::onViewEmployeeClicked);
+    } else {
+        qDebug() << "Button not found! Check the object name.";
+    }
 }
 
 MainWindow::~MainWindow()
@@ -49,7 +79,7 @@ void MainWindow::onAddEmployeeClicked()
 void MainWindow::onViewEmployeeClicked()
 {
     if (!m_allemployeeswindow) {
-        m_allemployeeswindow = new allemployees(this);  // 'this' makes it a child
+        m_allemployeeswindow = new allemployees(this);
     }
 
     m_allemployeeswindow->show();
@@ -59,18 +89,25 @@ void MainWindow::onViewEmployeeClicked()
 
 void MainWindow::resizeEvent(QResizeEvent *event){
     QMainWindow::resizeEvent(event);
+    qDebug()<<"Resize event-fullscreen"<<isFullScreen()<<" Size:"<<size();
 
-    is(isFullScreen()){
-        //int centerx=width/2-ui->viewEmployeesButton->width()/2 ;
-        int rightmargin=50;
-        int buttonX=width()-ui->viewEmployeesButton->width()-rightmargin;
+    QMargins margins=ui->verticalLayout->contentsMargins();
 
-        ui->viewEmployeesButton->move(buttonX,100);
-        ui->addEmployeeButton->move(centerx,);
-    }
+    if(width()>1000&&height()>650){
+       margins.setTop(100);
+       margins.setLeft(165);
+       margins.setRight(55);
+        ui->verticalLayout->setContentsMargins(margins);
+       ui->verticalLayout->setSpacing(25);
+    }else{
+    margins.setTop(45);
+    margins.setLeft(50);
+    margins.setRight(20);
+    ui->verticalLayout->setSpacing(25);
+    ui->verticalLayout->setContentsMargins(margins);
 
 }
-
+}
 void MainWindow::keyPressEvent(QKeyEvent * event){
     if(event->key() ==Qt::Key_F5){
         QString sourceDir="C:/programming/cpp/C++/exercise p/payroll-system/";

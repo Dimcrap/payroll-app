@@ -3,7 +3,11 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include "allemployees.h"
+#include "addemployeewindow.h"
 #include <QTimer>
+#include <QStack>
+#include <QStackedWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -18,7 +22,6 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    void esizeEvent(QResizeEvent *event);
 
     ~MainWindow();
 private slots:
@@ -32,9 +35,14 @@ private:
     allemployees * m_allemployeeswindow;
 
     void setupConnections();
+
+    QStackedWidget *stackWidget;
+    QWidget *mainPage;
+
+
 protected:
     void keyPressEvent(QKeyEvent * event) override;
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
 };
 
 

@@ -1,11 +1,11 @@
 QMainWindow{
     background:qlineargradient(x1:0, y1:0, x2:1, y2:1,
-    stop:0 #667eea, stop:1 #764ba2);
+    stop:0 #E4E1ED, stop:1 #98C3ED);
     font-family:"Segoe UI", Arial, sans-serif;
 }
 
 QPushButton {
-    background-color:#7f828c;
+    background-color:#B5AFC7;
     color: #121929;
     border: none;
     padding: 12px 24px;
@@ -19,13 +19,26 @@ QPushButton:hover {
     background-color: #ede6d6 ;
     border: 2px solid #ffa343;
 }
+QLabel {
+padding: 5px;
+background: #f5f5f5;
+border-radius: 3px;
+min-width: 150px;
+};
+
+QGroupBox
+{
+border: 1px solid gray;
+border-radius: 5px;
+margin-top: 10px;
+padding: 10px;
+};
 
 
 QPushButton#addEmployeeButton{
-min-height :40px;
-margin-bottom 15px:
+
 }
 
 QPushButton#viewEmployeesButton{
-min-height :40px;
+
 }

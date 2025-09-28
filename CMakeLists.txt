@@ -50,6 +50,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         styles/styles.qss
         addemployeewindow.ui
         allemployees.ui
+        employeeinfobox.h employeeinfobox.cpp
+
 
     )
 
