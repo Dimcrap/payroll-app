@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include "employeeinfobox.h"
 
+
 namespace Ui {
 class allemployees;
 }
@@ -22,6 +23,7 @@ void handleEmployeesLoaded(const QVector<employeeOutput> &employees,
 private:
     Ui::allemployees *ui;
     QVBoxLayout *m_layout;
+    DatabaseHandler *m_dbhandler;
 };
 
 #endif // ALLEMPLOYEES_H

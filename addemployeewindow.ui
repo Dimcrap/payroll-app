@@ -1,31 +1,394 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>addemployeewindow</class>
- <widget class="QWidget" name="addemployeewindow">
+ <widget class="QMainWindow" name="addemployeewindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>576</width>
-    <height>328</height>
+    <width>749</width>
+    <height>553</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>addemployeewindow</string>
+   <string>MainWindow</string>
   </property>
-  <widget class="QPushButton" name="backToMain">
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QFormLayout" name="formLayout_2">
+    <item row="0" column="0">
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="14" column="1">
+        <widget class="QRadioButton" name="weeklyB">
+         <property name="text">
+          <string>weekly</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Salary type:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0" colspan="4">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Marital staus:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="3">
+        <widget class="QRadioButton" name="radioButton_11">
+         <property name="text">
+          <string>supportSpecilist</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QRadioButton" name="maleB">
+         <property name="text">
+          <string>Male</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Phone number:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="0" colspan="4">
+        <widget class="Line" name="line_6">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="PostionLabel">
+         <property name="text">
+          <string>Position:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="4">
+        <widget class="Line" name="line_5">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Hire date:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Salary amount:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="1" colspan="2">
+        <widget class="QLineEdit" name="lineEdit_3"/>
+       </item>
+       <item row="0" column="1" colspan="3">
+        <widget class="QLineEdit" name="name"/>
+       </item>
+       <item row="3" column="0" colspan="4">
+        <widget class="Line" name="line_4">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QDateEdit" name="birthdate"/>
+       </item>
+       <item row="12" column="1" colspan="2">
+        <widget class="QLineEdit" name="lineEdit_2"/>
+       </item>
+       <item row="10" column="0">
+        <widget class="QRadioButton" name="radioButton_8">
+         <property name="text">
+          <string>senior</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Gender:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="4">
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="2">
+        <widget class="QRadioButton" name="monthlyB">
+         <property name="text">
+          <string>monthly</string>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="1">
+        <widget class="QDateEdit" name="dateEdit"/>
+       </item>
+       <item row="10" column="2">
+        <widget class="QRadioButton" name="radioButton_10">
+         <property name="text">
+          <string>executive</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0" colspan="4">
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="1">
+        <widget class="QRadioButton" name="radioButton_9">
+         <property name="text">
+          <string>leadership</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="3">
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>$</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="3">
+        <widget class="QRadioButton" name="radioButton_7">
+         <property name="text">
+          <string>mid</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="QRadioButton" name="radioButton_6">
+         <property name="text">
+          <string>entry</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="3">
+        <widget class="QRadioButton" name="projectB">
+         <property name="text">
+          <string>project</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="0" colspan="4">
+        <widget class="Line" name="line_8">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Fullname:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>birthdate:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0" colspan="4">
+        <widget class="Line" name="line_7">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="QRadioButton" name="radioButton_5">
+         <property name="text">
+          <string>temprory</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QRadioButton" name="femaleB">
+         <property name="text">
+          <string>Female</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QRadioButton" name="marriedB">
+         <property name="text">
+          <string>Married</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QRadioButton" name="unmarriedB">
+         <property name="text">
+          <string>Unmarried</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QWidget" name="widget_2" native="true">
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>                                 Tax</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="Line" name="line_9">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Employer cost</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+       </item>
+       <item row="3" column="1">
+        <widget class="Line" name="line_10">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>Social security</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QWidget" name="widget_3" native="true"/>
+       </item>
+       <item row="5" column="1">
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_3"/>
+       </item>
+       <item row="6" column="1">
+        <widget class="Line" name="line_11">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Medicare</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+       </item>
+       <item row="9" column="1">
+        <widget class="QWidget" name="widget_6" native="true"/>
+       </item>
+       <item row="10" column="1">
+        <widget class="QWidget" name="widget_5" native="true"/>
+       </item>
+       <item row="11" column="1">
+        <widget class="QWidget" name="widget_4" native="true"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QPushButton" name="backToMain">
+      <property name="text">
+       <string>Main screen</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QWidget" name="widget_7" native="true"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QFrame" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>Add</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="text">
+       <string>erease </string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
-     <x>310</x>
-     <y>260</y>
-     <width>80</width>
-     <height>24</height>
+     <x>0</x>
+     <y>0</y>
+     <width>749</width>
+     <height>21</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Mainscreen</string>
-   </property>
+   <widget class="QMenu" name="menuAdd_employee">
+    <property name="title">
+     <string>Add employee</string>
+    </property>
+   </widget>
+   <addaction name="menuAdd_employee"/>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

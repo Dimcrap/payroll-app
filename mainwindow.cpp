@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-
+#include "addemployeewindow.h"
 
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -16,6 +16,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+
     ,m_addemployeewindow(nullptr)
     ,m_allemployeeswindow(nullptr)
 {
@@ -32,13 +33,14 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(stackedWidget);
 
     QPushButton *addEmployeeButton=findChild<QPushButton *>("addEmployeeButton");
-    if(addEmployeeButton){
-        connect(addEmployeeButton,&QPushButton::clicked,this,[stackedWidget](){
-            stackedWidget->setCurrentIndex(1);
-        });
-    }else {
+    if(!addEmployeeButton){
         qDebug() << "Button not found! Check the object name.";
-    }
+    };
+
+    connect(addEmployeeButton,&QPushButton::clicked,
+            this,[stackedWidget](){
+        stackedWidget->setCurrentIndex(1);
+    } );
 
     connect(m_addemployeewindow,&addemployeewindow::backToMain,this,[stackedWidget](){
         stackedWidget->setCurrentIndex(0);
@@ -60,10 +62,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupConnections()
 {
-    connect(ui->addEmployeeButton,&QPushButton::clicked,
-            this,&MainWindow::onAddEmployeeClicked);
+
     connect(ui->viewEmployeesButton,&QPushButton::clicked,
             this,&MainWindow::onViewEmployeeClicked);
+
 }
 
 void MainWindow::onAddEmployeeClicked()

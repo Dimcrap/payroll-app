@@ -23,7 +23,7 @@ QLabel {
 padding: 5px;
 background: #f5f5f5;
 border-radius: 3px;
-min-width: 150px;
+min-width: 50px;
 };
 
 QGroupBox
@@ -35,7 +35,8 @@ padding: 10px;
 };
 
 
-QPushButton#addEmployeeButton{
+QPushButton#backToMain{
+min-width:80px;
 
 }
 

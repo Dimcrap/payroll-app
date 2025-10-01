@@ -1,6 +1,6 @@
 #ifndef EMPLOYEEINFOBOX_H
 #define EMPLOYEEINFOBOX_H
-#include "userdata.h"
+#include "DatabaseHandler.h"
 #include <QWidget>
 #include <QGroupBox>
 

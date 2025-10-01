@@ -24,7 +24,7 @@ set(PROJECT_SOURCES
         allemployees.cpp
         allemployees.ui
         addemployeewindow.cpp
-        addemployeewindow.ui
+
 
 )
 set(PROJECT_FORMS
@@ -44,13 +44,15 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         ${PROJECT_FORMS}
         ${PROJECT_HEADERS}
-        addemployeewindow.h addemployeewindow.cpp
+
         allemployees.h allemployees.cpp
         data/1-createtable.sql data/payroll.db
         styles/styles.qss
-        addemployeewindow.ui
+
         allemployees.ui
         employeeinfobox.h employeeinfobox.cpp
+        addemployeewindow.h addemployeewindow.cpp addemployeewindow.ui
+        animatedrectwidget.h animatedrectwidget.cpp
 
 
     )
