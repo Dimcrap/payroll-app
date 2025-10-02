@@ -20,23 +20,23 @@ public:
     explicit addemployeewindow(QWidget *parent = nullptr);
     ~addemployeewindow();
     Userdata Userinputs();
-    taxdetails Usertaxinput(int userid);
+    void inputError(QString errormsg);
 
 private:
     Ui::addemployeewindow *ui;
-    QList<QRadioButton*> genders,marital
+    QList<QRadioButton*> genders,maritalsradios
         ,positions,salaryTypes;
     std::unique_ptr <DatabaseHandler> m_dbhandler;
+
+
 
 signals:
     void backToMain();
 
-
 private slots:
     void onBackButtonClicked();
     void onEraseButtonClicked();
-
-    void ;
+    void onAddButtonClicked();
 };
 
 #endif // ADDEMPLOYEEWINDOW_H

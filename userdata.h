@@ -43,6 +43,10 @@ struct taxdetails{
         employee_id(id),employer_cost(emcost),socialsec(socialsecureity),
         medicare(medcare){}
 
+    taxdetails():employee_id(-1),employer_cost(0.0),socialsec(0.0),
+        medicare(0.0){}
+
+
 };
 
 
@@ -62,6 +66,12 @@ struct Userdata{
              QDate &hiredate):name(uname),gender(ugender),maritalstatus(umaritalstatus),birthdate(ubirthdate),
         pos(uposition),phone(uphone),salaryform(usalaryform),salary_amount(salaryamount),hire_date(hiredate)
     {
+    }
+    Userdata():name(""),gender(""),maritalstatus(""),birthdate(QDate()),
+        pos(static_cast<position>(0)),phone(""),salaryform(static_cast<salary_type>(1)),
+        salary_amount(-1),hire_date(QDate())
+    {
+
     }
 };
 

@@ -10,6 +10,9 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    GlobalErrorHandler::install();
+
+
     QString sourceDir="C:/programming/cpp/C++/exercise p/payroll-system/";
     QFile stylefile(sourceDir+"/styles/styles.qss");
     qDebug()<<"looking in"<<stylefile.fileName();

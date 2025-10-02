@@ -91,7 +91,6 @@ void MainWindow::onViewEmployeeClicked()
 
 void MainWindow::resizeEvent(QResizeEvent *event){
     QMainWindow::resizeEvent(event);
-    qDebug()<<"Resize event-fullscreen"<<isFullScreen()<<" Size:"<<size();
 
     QMargins margins=ui->verticalLayout->contentsMargins();
 
@@ -130,10 +129,13 @@ void GlobalErrorHandler::install(){
 
 void GlobalErrorHandler::globalErrorHandler(QtMsgType type,
     const QMessageLogContext &context,const QString &msg){
+    if(type==QtFatalMsg||type==QtCriticalMsg||type==QtInfoMsg){
 
-    QTimer::singleShot(0,[type,msg](){
-        showGlobalPopup(type,msg);
-    });
+        QTimer::singleShot(0,[type,msg](){
+            showGlobalPopup(type,msg);
+        });
+
+    }
 
     fprintf(stderr, "%s\n", msg.toLocal8Bit().constData());
 }
@@ -150,20 +152,13 @@ void GlobalErrorHandler::showGlobalPopup(QtMsgType type,const QString &msg){
         msgBox.setIcon(QMessageBox::Critical);
         msgBox.setWindowTitle("Error");
     }
-    else if(type==QtWarningMsg){
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setWindowTitle("Warning");
-    }
-    else if(type==QtDebugMsg){
-        msgBox.setIcon(QMessageBox::NoIcon);
-        msgBox.setWindowTitle("Debug");
-    }else{
+    else{
         msgBox.setIcon(QMessageBox::Information);
         msgBox.setWindowTitle("Info");
-    }
+    };
 
     msgBox.setText(msg);
-    msgBox.resize(450,250);
+    msgBox.resize(480,250);
     msgBox.exec();
 
 }
