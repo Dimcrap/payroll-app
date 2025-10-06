@@ -23,6 +23,7 @@ public:
     void inputError(QString errormsg);
 
 private:
+
     Ui::addemployeewindow *ui;
     QList<QRadioButton*> genders,maritalsradios
         ,positions,salaryTypes;

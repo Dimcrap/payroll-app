@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "addemployeewindow.h"
-
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QMessageBox>
@@ -22,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    setMinimumSize(800,600);
+
     setupConnections();
 
     QWidget *orginalCenteralWidget=takeCentralWidget();
@@ -37,10 +38,12 @@ MainWindow::MainWindow(QWidget *parent)
         qDebug() << "Button not found! Check the object name.";
     };
 
+
     connect(addEmployeeButton,&QPushButton::clicked,
             this,[stackedWidget](){
         stackedWidget->setCurrentIndex(1);
     } );
+
 
     connect(m_addemployeewindow,&addemployeewindow::backToMain,this,[stackedWidget](){
         stackedWidget->setCurrentIndex(0);
@@ -49,10 +52,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     if (viewEmployeesButton) {
         connect(viewEmployeesButton, &QPushButton::clicked,
-                this, &MainWindow::onViewEmployeeClicked);
+              this, &MainWindow::onViewEmployeeClicked);
     } else {
         qDebug() << "Button not found! Check the object name.";
     }
+
 }
 
 MainWindow::~MainWindow()
@@ -106,9 +110,10 @@ void MainWindow::resizeEvent(QResizeEvent *event){
     margins.setRight(20);
     ui->verticalLayout->setSpacing(25);
     ui->verticalLayout->setContentsMargins(margins);
+    }
 
 }
-}
+
 void MainWindow::keyPressEvent(QKeyEvent * event){
     if(event->key() ==Qt::Key_F5){
         QString sourceDir="C:/programming/cpp/C++/exercise p/payroll-system/";
@@ -117,10 +122,10 @@ void MainWindow::keyPressEvent(QKeyEvent * event){
             QString styleSheet=QLatin1String(file.readAll());
             qApp->setStyleSheet(styleSheet);
             file.close();
-             qDebug() << "Stylesheet reloaded!";
+            qDebug() << "Stylesheet reloaded!";
         }
     }
-     QMainWindow::keyPressEvent(event);
+    QMainWindow::keyPressEvent(event);
 }
 
 void GlobalErrorHandler::install(){
@@ -158,7 +163,7 @@ void GlobalErrorHandler::showGlobalPopup(QtMsgType type,const QString &msg){
     };
 
     msgBox.setText(msg);
-    msgBox.resize(480,250);
+    msgBox.resize(580,450);
     msgBox.exec();
 
 }

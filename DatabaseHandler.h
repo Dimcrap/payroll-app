@@ -16,8 +16,10 @@ class DatabaseHandler:public QObject{
     Q_OBJECT
 public:
     explicit DatabaseHandler(const QString &pathtodb,QObject *parent=nullptr);
-
+    ~DatabaseHandler() ;
     bool isOpen() const;
+    DatabaseHandler(const DatabaseHandler&) = delete;
+    DatabaseHandler& operator=(const DatabaseHandler&) = delete;
 
     public slots:
     void loadallEmployees();
@@ -31,6 +33,7 @@ public:
 private:
 
     QSqlDatabase m_db;
+
 };
 
 

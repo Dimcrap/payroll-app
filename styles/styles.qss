@@ -4,10 +4,37 @@ QMainWindow{
     font-family:"Segoe UI", Arial, sans-serif;
 }
 
+QPushButton#backToMain
+{
+min-width:50px;
+font-size: 12px;
+margin-right:15px;
+margin-left:15px;
+}
+
+QPushButton#addbtn
+{
+min-width:40px;
+font-size: 12px;
+margin-right:80px;
+margin-left:30px;
+}
+
+QPushButton#Erase
+{
+min-width:80px;
+font-size: 12px;
+margin-right:80px;
+margin-left:30px;
+
+}
+
+
 QPushButton {
     background-color:#B5AFC7;
     color: #121929;
     border: none;
+
     padding: 12px 24px;
     border-radius: 6px;
     font-size: 14px;
@@ -21,28 +48,29 @@ QPushButton:hover {
     border: 2px solid #ffa343;
 }
 
+QLabel#label_9{
+    font-size: 18px;
+    font-weight: bold;
+    margin-top:15px;
+}
 
 QLabel {
 padding: 5px;
 background: #f5f5f5;
 border-radius: 3px;
 min-width: 50px;
+min-height:10px;
 };
 
-QGroupBox
+QGroupBox#groupBox
 {
-border: 1px solid gray;
-border-radius: 5px;
-margin-top: 10px;
-padding: 10px;
+padding: 100px;
+max-heigt:12px
 };
 
 
-QPushButton#backToMain{
-min-width:80px;
-
-}
 
 QPushButton#viewEmployeesButton{
 
 }
+

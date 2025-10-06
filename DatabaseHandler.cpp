@@ -3,13 +3,37 @@
 #include <QDebug>
 #include <QSqlDriver>
 #include <sqlite3.h>
-
+#include <QCoreApplication>
 
 DatabaseHandler::DatabaseHandler(const QString &pathtodb,QObject *parent):
     QObject(parent){
 
-    m_db=QSqlDatabase::addDatabase("QSQLITE");
-    m_db.setDatabaseName("data/payroll.db");
+    QStringList connections = QSqlDatabase::connectionNames();
+
+    for (const QString &connectionName : connections) {
+        QSqlDatabase existingDb = QSqlDatabase::database(connectionName, false);
+        if (existingDb.isValid() && existingDb.databaseName() == pathtodb) {
+            qDebug() << "Found existing connection to same database:" << connectionName;
+
+            if (existingDb.isOpen()) {
+
+                QSqlQuery cleanupQuery(existingDb);
+                cleanupQuery.finish();
+
+                existingDb.close();
+                qDebug() << "Closed existing connection:" << connectionName;
+            }
+
+
+            QSqlDatabase::removeDatabase(connectionName);
+            qDebug() << "Removed existing connection:" << connectionName;
+        }
+    }
+
+
+    QString uniqueName=QString("connection_%1").arg(quintptr(this));
+    m_db=QSqlDatabase::addDatabase("QSQLITE",uniqueName);
+    m_db.setDatabaseName(pathtodb);
 
     if(!m_db.open()){
         QString error=m_db.lastError().text();
@@ -21,6 +45,12 @@ DatabaseHandler::DatabaseHandler(const QString &pathtodb,QObject *parent):
 
 }
 
+DatabaseHandler::~DatabaseHandler() {
+    if (m_db.isOpen()) {
+        m_db.close();
+        qDebug() << "Database connection closed:" << m_db.connectionName();
+    }
+}
 void DatabaseHandler::backupdb(const QString &backupFilePath){
 
     QSqlDatabase db= QSqlDatabase::database();
@@ -142,12 +172,31 @@ void DatabaseHandler::loadallEmployees(){
         QVector <employeeOutput>allusers;
         QSqlQuery query;
 
-        QString sql="SELECT e.*,t.* FROM employee e"
-            "INNER JOIN tax t ON e.ID=t.employee_id ";
-        if(query.exec(sql)){
-            emit allemployeesloaded(allusers);
+        if(!m_db.isOpen()){
+            emit allemployeesloaded(allusers,"Data base connection issue");
             return;
-        };
+        }
+        QString sql="SELECT e.*,t.* FROM employee e "
+            "INNER JOIN tax t ON e.ID=t.employee_id;";
+
+        qDebug() << "About to execute query:" << sql;
+
+        bool success = query.exec(sql);
+        qDebug() << "Query execution result:" << success;
+
+        if(!success){
+            qDebug() << "Query failed! Last error:" << query.lastError().text();
+            emit allemployeesloaded(allusers,"Execution error!");
+            return;
+        } else {
+            qDebug() << "Query executed successfully!";
+            // Process the results here
+        }
+        /*if(!query.exec(sql)){
+            emit allemployeesloaded(allusers,"Execution error!");
+            return;
+        };*/
+        qDebug()<<"database method ";
 
         while(query.next()){
             employeeOutput usrdata;
@@ -160,10 +209,11 @@ void DatabaseHandler::loadallEmployees(){
             usrdata.pos=query.value("position").toString();
             usrdata.phone=query.value("phone").toString();
             usrdata.salarytype=query.value("salaryform").toString();
-            usrdata.salaryAmount=query.value("salaryamount").toInt();//QString dollarString = QString("$%1").arg(alltaxes, 0, 'f', 2);
+            usrdata.salaryAmount=query.value("salaryamount").toInt();
+            //QString dollarString = QString("$%1").arg(alltaxes, 0, 'f', 2);
             QDate birthD=query.value("birth_date").toDate();
             usrdata.birthdate=birthD.toString("yyyy/MM/dd");
-            QDate hireD=query.value("hire-dat").toDate();
+            QDate hireD=query.value("hire-date").toDate();
             usrdata.hiredate=hireD.toString("yyyy/MM/dd");
             double emplyercost=query.value("employer_cost").isNull()?0.0:query.value("employer_cost").toDouble();
             double socialsec=query.value("social").isNull()?0.0:query.value("social").toDouble();

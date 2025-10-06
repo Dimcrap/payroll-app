@@ -2,7 +2,7 @@
 #include "ui_allemployees.h"
 #include <QScrollArea>
 #include <QLayoutItem>
-#include <memory>
+
 
 
 allemployees::allemployees(QWidget *parent)
@@ -15,41 +15,47 @@ allemployees::allemployees(QWidget *parent)
     setWindowFlag(Qt::Window);
 
 
-
-    m_dbhandler=new DatabaseHandler("data/payroll");
-
-    connect(m_dbhandler,&DatabaseHandler::allemployeesloaded,
-            this ,&allemployees::handleEmployeesLoaded);
-    if(!m_dbhandler){
-        qDebug("couldn't set database connection");
-    };
-
-    m_dbhandler->loadallEmployees();
     QScrollArea *scrollArea=new QScrollArea(this);
     QWidget *scrollwidget=new QWidget();
     m_layout=new QVBoxLayout(scrollwidget);
 
 
-
     scrollArea->setWidget(scrollwidget);
     scrollArea->setWidgetResizable(true);
-
     setCentralWidget(scrollArea);
+
+
+    m_dbhandler=new DatabaseHandler("data/payroll");
+
+    connect(m_dbhandler,&DatabaseHandler::allemployeesloaded,
+            this ,&allemployees::handleEmployeesLoaded);
+
+    m_dbhandler->loadallEmployees();
 
 }
 
 allemployees::~allemployees()
 {
     delete ui;
+    delete m_dbhandler;
 }
 
 
 void allemployees::handleEmployeesLoaded(const QVector<employeeOutput> &employees,
                                          const QString &error){
+
+
+    if(!m_layout||!m_layout->parent()){
+        qCritical()<<"Layout is null!";
+        return;
+    }
+
     QLayoutItem *item;
     while((item=m_layout->takeAt(0))!=nullptr){
+        QWidget *widget=item->widget();
         if(item->widget()){
-            delete item->widget();
+            widget->setParent(nullptr);
+            widget->deleteLater();
         }
         delete item;
     }
