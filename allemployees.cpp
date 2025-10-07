@@ -25,7 +25,7 @@ allemployees::allemployees(QWidget *parent)
     setCentralWidget(scrollArea);
 
 
-    m_dbhandler=new DatabaseHandler("data/payroll");
+    m_dbhandler=new DatabaseHandler("data/payroll.db");
 
     connect(m_dbhandler,&DatabaseHandler::allemployeesloaded,
             this ,&allemployees::handleEmployeesLoaded);
@@ -56,7 +56,7 @@ void allemployees::handleEmployeesLoaded(const QVector<employeeOutput> &employee
         if(item->widget()){
             widget->setParent(nullptr);
             widget->deleteLater();
-        }
+        };
         delete item;
     }
 

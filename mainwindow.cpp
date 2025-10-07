@@ -11,6 +11,10 @@
 #include <QLayout>
 #include <QMargins>
 #include <QStackedWidget>
+#include <QApplication>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QStyle>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -147,23 +151,47 @@ void GlobalErrorHandler::globalErrorHandler(QtMsgType type,
 
 
 void GlobalErrorHandler::showGlobalPopup(QtMsgType type,const QString &msg){
-    QMessageBox msgBox;
-
-    if(type==QtFatalMsg){
-        msgBox.setIcon(QMessageBox::Critical);
-        msgBox.setWindowTitle("Fatal");
+    QDialog dialog;
+    dialog.setWindowTitle(type==QtFatalMsg?"Fatal":
+                          type==QtCriticalMsg?"error":"Info");
+    QVBoxLayout *boxlayout=new QVBoxLayout(&dialog);
+    QLabel *iconlabel=new QLabel();
+    QStyle::StandardPixmap icon;
+    if(type==QtFatalMsg||type==QtCriticalMsg){
+        icon=QStyle::SP_MessageBoxCritical;
+    }else{
+        icon=QStyle::SP_MessageBoxInformation;
     }
-    else if(type==QtCriticalMsg){
-        msgBox.setIcon(QMessageBox::Critical);
-        msgBox.setWindowTitle("Error");
-    }
-    else{
-        msgBox.setIcon(QMessageBox::Information);
-        msgBox.setWindowTitle("Info");
-    };
 
-    msgBox.setText(msg);
-    msgBox.resize(580,450);
-    msgBox.exec();
+    QPixmap pixmap=dialog.style()->standardIcon(icon).pixmap(32,32);
+    iconlabel->setPixmap(pixmap);
+    iconlabel->setAlignment(Qt::AlignCenter);
 
+    QLabel *messagelabel=new QLabel(msg);
+    messagelabel->setWordWrap(true);
+    messagelabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+
+    QDialogButtonBox *btnBox=new QDialogButtonBox(QDialogButtonBox::Ok);
+    QObject::connect(btnBox,&QDialogButtonBox::accepted,&dialog,&QDialog::accept);
+
+    btnBox->setStyleSheet(
+        "QDialogButtonBox {"
+        "    background-color:#19b0b5;"
+        "    min-width:80px;"
+        "    margin:1px;"
+        "}"
+        "QPushButton {"
+        "    background-color:#19b0b5;"
+        "    min-width:80px;"
+        "}"); ;
+
+    boxlayout->addWidget(iconlabel);
+    boxlayout->addWidget(messagelabel);
+    boxlayout->addWidget(btnBox);
+
+
+    dialog.resize(380,240);
+    dialog.setMinimumSize(380,240);
+
+    dialog.exec();
 }

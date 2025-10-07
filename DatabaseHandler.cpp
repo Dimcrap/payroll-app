@@ -4,13 +4,33 @@
 #include <QSqlDriver>
 #include <sqlite3.h>
 #include <QCoreApplication>
+#include <QFileInfo>
+
 
 DatabaseHandler::DatabaseHandler(const QString &pathtodb,QObject *parent):
     QObject(parent){
 
+
+    qDebug()<<"available drivers:"<<QSqlDatabase::drivers();
+    qDebug()<<"Database path:"<<pathtodb;
+
+    QFileInfo dbFile(pathtodb);
+    if (!dbFile.exists()) {
+        qCritical() << "Database file does not exist:" << pathtodb;
+        return;
+    }
+
+    if (!dbFile.isReadable()) {
+        qCritical() << "Database file is not readable:" << pathtodb;
+        return;
+    }
+
+    //qDebug() << "Database file exists, size:" << dbFile.size() << "bytes";
+
     QStringList connections = QSqlDatabase::connectionNames();
 
     for (const QString &connectionName : connections) {
+
         QSqlDatabase existingDb = QSqlDatabase::database(connectionName, false);
         if (existingDb.isValid() && existingDb.databaseName() == pathtodb) {
             qDebug() << "Found existing connection to same database:" << connectionName;
@@ -41,6 +61,7 @@ DatabaseHandler::DatabaseHandler(const QString &pathtodb,QObject *parent):
 
     }else{
         qDebug()<<"db opened successfully";
+
     }
 
 }
@@ -170,7 +191,7 @@ bool  DatabaseHandler::addusertaxes(taxdetails & usertax){
 
 void DatabaseHandler::loadallEmployees(){
         QVector <employeeOutput>allusers;
-        QSqlQuery query;
+    QSqlQuery query(m_db);
 
         if(!m_db.isOpen()){
             emit allemployeesloaded(allusers,"Data base connection issue");
@@ -192,7 +213,8 @@ void DatabaseHandler::loadallEmployees(){
             qDebug() << "Query executed successfully!";
             // Process the results here
         }
-        /*if(!query.exec(sql)){
+        /*
+         * if(!query.exec(sql)){
             emit allemployeesloaded(allusers,"Execution error!");
             return;
         };*/
@@ -200,7 +222,6 @@ void DatabaseHandler::loadallEmployees(){
 
         while(query.next()){
             employeeOutput usrdata;
-
 
             usrdata.id=query.value("ID").toString();
             usrdata.name=query.value("name").toString();
@@ -224,7 +245,8 @@ void DatabaseHandler::loadallEmployees(){
 
             allusers.append(usrdata);
         }
-        emit DatabaseHandler::allemployeesloaded(allusers,"employee list loaded successfully");
+        emit DatabaseHandler::allemployeesloaded(allusers,"all employees loaded successfully");
+
     }
 
 

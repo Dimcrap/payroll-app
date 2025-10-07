@@ -13,11 +13,12 @@ addemployeewindow::addemployeewindow(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle("Add New Employee");
-    m_dbhandler=std::make_unique<DatabaseHandler> ("data/payroll.db");
     setMinimumSize(700,380);
     setWindowFlag(Qt::Window);
+
     ui->phoneNumber->setValidator(new QIntValidator(this));
     ui->Salaryamount->setValidator(new QIntValidator(this));
+
     connect(ui->backToMain,&QPushButton::clicked,
     this,&addemployeewindow::onBackButtonClicked);
     connect(ui->Erase,&QPushButton::clicked,this,
@@ -74,6 +75,7 @@ void addemployeewindow::onEraseButtonClicked()
 }
 
 void addemployeewindow::onAddButtonClicked(){
+     m_dbhandler=std::make_unique<DatabaseHandler> ("data/payroll.db");
     int EmployeeId=m_dbhandler->adduserdata(Userinputs());
     double employerCost=ui->employerSpinbox->value();
     double SocialSec=ui->doubleSpinBox_3->value();
