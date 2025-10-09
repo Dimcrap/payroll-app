@@ -18,7 +18,6 @@ employeeinfobox::employeeinfobox(const employeeOutput &employee,QWidget *parent)
     QLabel *positionLabel =new  QLabel(employee.pos);
     QLabel *hiredateLaber  =new   QLabel(employee.hiredate);
     QLabel *salarytypeLabel =new QLabel(employee.salarytype);
-
     QLabel *salaryLabel =new QLabel(QString::number(employee.salaryAmount));
     QLabel *taxLabel  =new  QLabel(employee.tax);
 
@@ -40,7 +39,7 @@ employeeinfobox::employeeinfobox(const employeeOutput &employee,QWidget *parent)
     layout->addRow("Tax amouny: %",taxLabel);
 
 
-
+    this->setLayout(layout);
 
 
 }

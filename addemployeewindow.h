@@ -28,7 +28,7 @@ private:
     QList<QRadioButton*> genders,maritalsradios
         ,positions,salaryTypes;
     std::unique_ptr <DatabaseHandler> m_dbhandler;
-
+    void cleanInputs();
 
 
 signals:

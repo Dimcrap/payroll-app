@@ -28,7 +28,6 @@ public:
     bool addusertaxes(taxdetails & usertax);
 
     signals:
-    void employeeAdded(bool success,const QString &error="");
     void allemployeesloaded(const QVector<employeeOutput> &employees,const QString &error="");
 private:
 

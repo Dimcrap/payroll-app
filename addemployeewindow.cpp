@@ -16,8 +16,15 @@ addemployeewindow::addemployeewindow(QWidget *parent)
     setMinimumSize(700,380);
     setWindowFlag(Qt::Window);
 
+    ui->fram1->setMinimumWidth(160);
     ui->phoneNumber->setValidator(new QIntValidator(this));
     ui->Salaryamount->setValidator(new QIntValidator(this));
+    ui->genderGroupBox->setStyleSheet("max-height:30px;");
+    ui->maritalGroupBox->setStyleSheet("max-height:30px;");
+    ui->positonGroupBox->setStyleSheet("max-height:80px;");
+    ui->radioButton_7->setStyleSheet("margin-left:5px");
+    ui->radioButton_10->setStyleSheet("margin-left:20px");
+    ui->salarytypeGroupBox->setStyleSheet("max-height:30px");
 
     connect(ui->backToMain,&QPushButton::clicked,
     this,&addemployeewindow::onBackButtonClicked);
@@ -42,29 +49,28 @@ addemployeewindow::addemployeewindow(QWidget *parent)
     };
 
 
-
 }
+
 
 void addemployeewindow::onBackButtonClicked(){
 
     emit backToMain();
 }
 
-void addemployeewindow::onEraseButtonClicked()
-{
+void addemployeewindow::cleanInputs(){
     QList<QLineEdit *> LineEdits=findChildren<QLineEdit*>();
     for (QLineEdit *lineEdit:LineEdits){
         lineEdit->clear();
     }
 
     QList<QDateEdit *> dateEdits=findChildren<QDateEdit*>();
-        for(QDateEdit *dateEdit:dateEdits){
+    for(QDateEdit *dateEdit:dateEdits){
         dateEdit->setDate(QDate::currentDate());
     }
 
-        QList<QDoubleSpinBox*>doublespinboxes=findChildren<QDoubleSpinBox*>();
+    QList<QDoubleSpinBox*>doublespinboxes=findChildren<QDoubleSpinBox*>();
     for (QDoubleSpinBox *doublespinbox:doublespinboxes){
-            doublespinbox->setValue(0.0);
+        doublespinbox->setValue(0.0);
     }
 
     QList<QRadioButton*>radiobuttons=findChildren<QRadioButton *>();
@@ -74,16 +80,28 @@ void addemployeewindow::onEraseButtonClicked()
 
 }
 
+void addemployeewindow::onEraseButtonClicked()
+{
+ cleanInputs();
+}
+
 void addemployeewindow::onAddButtonClicked(){
      m_dbhandler=std::make_unique<DatabaseHandler> ("data/payroll.db");
     int EmployeeId=m_dbhandler->adduserdata(Userinputs());
+     if(EmployeeId==-1){
+        qFatal()<<"error inserting primary datas";
+         return;
+     };
     double employerCost=ui->employerSpinbox->value();
     double SocialSec=ui->doubleSpinBox_3->value();
     double Medicare=ui->doubleSpinBox->value();
     taxdetails taxinput(EmployeeId,employerCost,SocialSec,Medicare);
-    m_dbhandler->addusertaxes(taxinput);
+    if(!m_dbhandler->addusertaxes(taxinput)){
+        return;
+    }else{
+        qInfo("Employee added");
+    };
 
-    qInfo("Employee added");
 }
 
 addemployeewindow::~addemployeewindow()
@@ -154,6 +172,12 @@ Userdata addemployeewindow::Userinputs(){
     QString salaryText=ui->Salaryamount->text();
     bool S_flag;
     salaryAmount=salaryText.toInt(&S_flag);
+
+    if(nameLine.isEmpty()||gender.isEmpty(),marital.isEmpty()||phoneNum.isEmpty()){
+        inputError("Empty slot detected.");
+        return Userdata();
+    };
+
 
     if(!S_flag||salaryText.isEmpty()){
         inputError("Erroe storing salary amount");

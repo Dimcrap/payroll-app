@@ -145,15 +145,15 @@ bool DatabaseHandler::isOpen() const{
 int DatabaseHandler::adduserdata(const Userdata &userdatas){
     QSqlQuery query;
     query.prepare("INSERT INTO employee (name,gender,marital_status,"
-                  "pos,phone,salaryform,salary_amount,birth_date,hire_date)"
-                  "VALUES (:sername,:gender,:pos,:phone,"
-                  ":salaryform,:salary_amount,:birthdat,:hire_date)");
+                  "pos,phone,salaryform,salary_amount,birth_date,hire_date) "
+                  "VALUES (:username,:gender,:marital_status,:pos,:phone, "
+                  ":salaryform,:salary_amount,:birthdate,:hire_date)");
 
-    query.bindValue(":name",userdatas.name);
+    query.bindValue(":username",userdatas.name);
     query.bindValue(":gender",userdatas.gender);
     query.bindValue(":marital_status",userdatas.maritalstatus);
     query.bindValue(":pos",postionTostring(userdatas.pos));
-    query.bindValue("phone",userdatas.phone);
+    query.bindValue(":phone",userdatas.phone);
     query.bindValue(":salaryform",salarytypeTostring(userdatas.salaryform));
     query.bindValue(":salary_amount",userdatas.salary_amount);
     query.bindValue(":birthdate",userdatas.birthdate);
@@ -163,18 +163,15 @@ int DatabaseHandler::adduserdata(const Userdata &userdatas){
         if(!query.exec()){
         //qCritical<<"Inserting data failed:"<<query.lastError().text();
         QString err=query.lastError().text();
-        emit DatabaseHandler::employeeAdded(false,err);
         return -1;
         }
-
-    emit DatabaseHandler::employeeAdded(true,"emplyee data added successfully");
     return query.lastInsertId().toInt();
     }
 
 bool  DatabaseHandler::addusertaxes(taxdetails & usertax){
         QSqlQuery query;
         query.prepare("INSERT INTO tax(employee_id,emoployer_cost,"
-                      "social,medicare)"
+                      "social,medicare) "
                       "VALUES(:employee_id,:emoployer_cost,:social,:medicare)");
 
         query.bindValue(":employee_id",usertax.employee_id);
@@ -213,12 +210,12 @@ void DatabaseHandler::loadallEmployees(){
             qDebug() << "Query executed successfully!";
             // Process the results here
         }
-        /*
-         * if(!query.exec(sql)){
+
+         if(!query.exec(sql)){
             emit allemployeesloaded(allusers,"Execution error!");
             return;
-        };*/
-        qDebug()<<"database method ";
+        };
+
 
         while(query.next()){
             employeeOutput usrdata;
@@ -245,7 +242,7 @@ void DatabaseHandler::loadallEmployees(){
 
             allusers.append(usrdata);
         }
-        emit DatabaseHandler::allemployeesloaded(allusers,"all employees loaded successfully");
+        emit DatabaseHandler::allemployeesloaded(allusers);
 
     }
 

@@ -66,10 +66,31 @@ void allemployees::handleEmployeesLoaded(const QVector<employeeOutput> &employee
         return;
     }
 
-    for(const employeeOutput & emp:employees){
-        employeeinfobox *infobox=new employeeinfobox(emp);
-        m_layout->addWidget(infobox);
-    }
+    if(employees.empty()){
+
+    employeeOutput emptyForm;  
+    emptyForm.id="0";
+    emptyForm.name="";
+    emptyForm.gender="";
+    emptyForm.marital=" ";
+    emptyForm.pos=" ";
+    emptyForm.phone=" ";
+    emptyForm.salarytype=" ";
+    emptyForm.salaryAmount=0;
+    emptyForm.birthdate=" ";
+    emptyForm.hiredate=" ";
+    emptyForm.tax="%";
+
+    employeeinfobox *emptyinfobox=new employeeinfobox(emptyForm);
+    m_layout->addWidget(emptyinfobox);
+
+    }else{
+
+        for(const employeeOutput & emp:employees){
+            employeeinfobox *infobox=new employeeinfobox(emp);
+            m_layout->addWidget(infobox);
+        };
+    };
 
     m_layout->addStretch();
 }

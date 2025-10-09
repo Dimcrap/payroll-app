@@ -155,6 +155,7 @@ void GlobalErrorHandler::showGlobalPopup(QtMsgType type,const QString &msg){
     dialog.setWindowTitle(type==QtFatalMsg?"Fatal":
                           type==QtCriticalMsg?"error":"Info");
     QVBoxLayout *boxlayout=new QVBoxLayout(&dialog);
+    dialog.setStyleSheet("{QDialog { background-color:#d0d8d9;}");
     QLabel *iconlabel=new QLabel();
     QStyle::StandardPixmap icon;
     if(type==QtFatalMsg||type==QtCriticalMsg){
@@ -163,35 +164,55 @@ void GlobalErrorHandler::showGlobalPopup(QtMsgType type,const QString &msg){
         icon=QStyle::SP_MessageBoxInformation;
     }
 
-    QPixmap pixmap=dialog.style()->standardIcon(icon).pixmap(32,32);
+    QPixmap pixmap=dialog.style()->standardIcon(icon).pixmap(20,20);
     iconlabel->setPixmap(pixmap);
     iconlabel->setAlignment(Qt::AlignCenter);
+    iconlabel->setFixedSize(40, 40);
+    iconlabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    iconlabel->setStyleSheet("{QLabel { background-color:#d0d8d9;}");
 
     QLabel *messagelabel=new QLabel(msg);
     messagelabel->setWordWrap(true);
     messagelabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    QFont messagefont=messagelabel->font();
+    messagefont.setPointSize(11);
+    messagelabel->setFont(messagefont);
+    messagelabel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
+
 
     QDialogButtonBox *btnBox=new QDialogButtonBox(QDialogButtonBox::Ok);
     QObject::connect(btnBox,&QDialogButtonBox::accepted,&dialog,&QDialog::accept);
 
     btnBox->setStyleSheet(
         "QDialogButtonBox {"
-        "    background-color:#19b0b5;"
+        "    background-color:#cacfce;"
         "    min-width:80px;"
         "    margin:1px;"
+        "    max-height:35px;"
         "}"
         "QPushButton {"
-        "    background-color:#19b0b5;"
+        "    background-color:#cacfce;"
         "    min-width:80px;"
-        "}"); ;
+        "   max-height:35px;"
+        "    font-size: 10px;"
+        "   padding:0px;"
 
-    boxlayout->addWidget(iconlabel);
-    boxlayout->addWidget(messagelabel);
+        "}");
+
+    QWidget *contents=new QWidget();
+    contents->setStyleSheet("QWidget { background-color: #e6eded; }");
+    contents->setFixedSize(330,70);
+    QHBoxLayout *contentsBoxlayout=new QHBoxLayout(contents);
+
+    contentsBoxlayout->addWidget(iconlabel);
+    contentsBoxlayout->addWidget(messagelabel);
+
+    boxlayout->addWidget(contents);
     boxlayout->addWidget(btnBox);
 
 
-    dialog.resize(380,240);
-    dialog.setMinimumSize(380,240);
+    dialog.resize(350,170);
+    dialog.setMinimumSize(350,170);
 
     dialog.exec();
 }
