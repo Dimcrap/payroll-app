@@ -72,6 +72,7 @@ position intToEmpPosition(int value){
         break;
     case 10:
         return position::supportSpecialist;
+        break;
     default:
         qWarning()<<"Invalid value input:"<<QString::number(value);
         return position::temprory;

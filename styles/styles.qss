@@ -34,7 +34,6 @@ QPushButton {
     background-color:#B5AFC7;
     color: #121929;
     border: none;
-
     padding: 12px 24px;
     border-radius: 6px;
     font-size: 14px;
@@ -52,6 +51,8 @@ QLabel#label_9{
     font-size: 18px;
     font-weight: bold;
     margin-top:15px;
+    text-align:center;
+    qproperty-alignment:'AlignCenter';
 }
 
 QLabel {

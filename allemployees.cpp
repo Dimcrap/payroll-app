@@ -84,6 +84,8 @@ void allemployees::handleEmployeesLoaded(const QVector<employeeOutput> &employee
     employeeinfobox *emptyinfobox=new employeeinfobox(emptyForm);
     m_layout->addWidget(emptyinfobox);
 
+    qInfo()<<"no employee founded";
+
     }else{
 
         for(const employeeOutput & emp:employees){

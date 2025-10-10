@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
               this, &MainWindow::onViewEmployeeClicked);
     } else {
         qDebug() << "Button not found! Check the object name.";
-    }
+    };
 
 }
 
