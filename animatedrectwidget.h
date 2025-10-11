@@ -8,15 +8,13 @@
 class animatedrectwidget:public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(int yOffset READ getYOffset WRITE setYOffset)
+
 public:
     explicit animatedrectwidget(QWidget *parent=nullptr);
     ~animatedrectwidget();
 
     void startAnimation();
     void stopAnimation();
-    int getYOffset()const;
-    void setYOffset(int offset);
 
 protected:
     void paintEvent(QPaintEvent *event)override;
@@ -26,15 +24,18 @@ private slots:
     void updateAnimation();
 
 private:
-  void setupAnimation();
+    void initialzieInternalRectangles();
 
     QTimer *m_timer;
-    QPropertyAnimation *m_animation;
+    QVector <QRect> m_relativeinternalRects;
+    QColor m_mainRectColor=QColor("#eeeee4");
+    QColor m_internalRectColor=QColor("#cdc4c8");
+
+    QPoint m_mainRectPosition=QPoint(100,160);
+    QSize m_mainRectSize=QSize(300,330);
     int m_yOffset;
     bool m_movingUp;
-    QPoint m_startingPosition;
-    QRect m_rect;
-    QColor m_rectColor;
+    //QPoint m_startingPosition;
 
 };
 

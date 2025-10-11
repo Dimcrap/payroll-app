@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "addemployeewindow.h"
+#include "animatedrectwidget.h"
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QMessageBox>
@@ -16,6 +17,7 @@
 #include <QLabel>
 #include <QStyle>
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -28,6 +30,11 @@ MainWindow::MainWindow(QWidget *parent)
     setMinimumSize(800,600);
 
     setupConnections();
+
+    QVBoxLayout *leftlayout=new QVBoxLayout(ui->leftwidget);
+    animatedrectwidget *animatedWidget=new animatedrectwidget(this);
+    leftlayout->addWidget(animatedWidget);
+    animatedWidget->startAnimation();
 
     QWidget *orginalCenteralWidget=takeCentralWidget();
     QStackedWidget *stackedWidget = new QStackedWidget(this);
