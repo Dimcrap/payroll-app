@@ -2,12 +2,17 @@
 #include <QLayout>
 #include <QFormLayout>
 #include <QLabel>
+#include <QPushButton>
 
 employeeinfobox::employeeinfobox(const employeeOutput &employee,QWidget *parent)
     :QGroupBox(parent)
 {
 
     setTitle(employee.name+"(ID:"+employee.id+")");
+    QFont font = this->font();
+    font.setPointSize(14);
+    font.setBold(true);
+    this->setFont(font);
 
     QFormLayout *layout=new QFormLayout(this);
     layout->setVerticalSpacing(8);
@@ -28,6 +33,10 @@ employeeinfobox::employeeinfobox(const employeeOutput &employee,QWidget *parent)
                             , salaryLabel,      taxLabel
     };
 
+    QPushButton *deletebtn=new QPushButton("Delete");
+    deletebtn->setStyleSheet("padding:1px;max-width:100px;min-height:30px;min-width:80px");
+    layout->addWidget(deletebtn);
+    layout->setAlignment(deletebtn,Qt::AlignRight);
     layout->addRow("Gender:",genderLabel);
     layout->addRow("Marital Status:",maritalLabel);
     layout->addRow("Birth date:",birthLabel);
@@ -36,10 +45,9 @@ employeeinfobox::employeeinfobox(const employeeOutput &employee,QWidget *parent)
     layout->addRow("Hire date:",hiredateLaber);
     layout->addRow("Salary form:",salarytypeLabel);
     layout->addRow("Salary anmount:",salaryLabel);
-    layout->addRow("Tax amouny: %",taxLabel);
+    layout->addRow("Tax amount: %",taxLabel);
 
-
+    this->update();
     this->setLayout(layout);
-
 
 }

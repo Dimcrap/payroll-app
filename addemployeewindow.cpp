@@ -12,6 +12,7 @@ addemployeewindow::addemployeewindow(QWidget *parent)
 
     : QMainWindow(parent)
     , ui(new Ui::addemployeewindow)
+
 {
     ui->setupUi(this);
     setWindowTitle("Add New Employee");
@@ -46,12 +47,32 @@ addemployeewindow::addemployeewindow(QWidget *parent)
         ui->weeklyB,ui->monthlyB,ui->projectB
     };
 
+    positions={
+        ui->radioButton_5,ui->radioButton_6,
+        ui->radioButton_7,ui->radioButton_8,
+        ui->radioButton_9,ui->radioButton_10,
+        ui->radioButton_11
+    };
+}
 
+void addemployeewindow::setDataBaseHandler(std::shared_ptr<DatabaseHandler> handler){
+    m_dbhandler=handler;
 }
 
 
-void addemployeewindow::onBackButtonClicked(){
+void addemployeewindow::showEvent(QShowEvent *event){
+    QMainWindow::showEvent(event);
 
+    if(m_dbhandler&&!m_dbhandler->isOpen()){
+    if(!m_dbhandler->openDatabase()){
+            qDebug()<<"Failed to open database in showEvent";
+
+    };
+}
+}
+
+void addemployeewindow::onBackButtonClicked(){
+    cleanInputs();
     emit backToMain();
 }
 
@@ -59,12 +80,12 @@ void addemployeewindow::cleanInputs(){
     QList<QLineEdit *> LineEdits=findChildren<QLineEdit*>();
     for (QLineEdit *lineEdit:LineEdits){
         lineEdit->clear();
-    }
+    };
 
     QList<QDateEdit *> dateEdits=findChildren<QDateEdit*>();
     for(QDateEdit *dateEdit:dateEdits){
         dateEdit->setDate(QDate::currentDate());
-    }
+    };
 
     QList<QDoubleSpinBox*>doublespinboxes=findChildren<QDoubleSpinBox*>();
     for (QDoubleSpinBox *doublespinbox:doublespinboxes){
@@ -102,19 +123,26 @@ void addemployeewindow::onEraseButtonClicked()
  cleanInputs();
 }
 
+
+
 void addemployeewindow::onAddButtonClicked(){
-     m_dbhandler=std::make_unique<DatabaseHandler> ("data/payroll.db");
-    positions={
-        ui->radioButton_5,ui->radioButton_6,
-        ui->radioButton_7,ui->radioButton_8,
-        ui->radioButton_9,ui->radioButton_10,
-        ui->radioButton_11
-    };
+
+    qDebug() << "m_dbhandler exists?" << (m_dbhandler != nullptr);
+    if (m_dbhandler) {
+        qDebug() << "Database open?" << m_dbhandler->isOpen();
+    }
+
+    if(Userinputs().name.isEmpty()){
+        qCritical()<<"Unable to add employee";
+        return;
+    }
+
     int EmployeeId=m_dbhandler->adduserdata(Userinputs());
      if(EmployeeId==-1){
         qCritical()<<"error inserting primary datas";
          return;
-     };
+    };
+
     double employerCost=ui->employerSpinbox->value();
     double SocialSec=ui->doubleSpinBox_3->value();
     double Medicare=ui->doubleSpinBox->value();
@@ -126,6 +154,7 @@ void addemployeewindow::onAddButtonClicked(){
     };
 
 }
+
 
 addemployeewindow::~addemployeewindow()
 {

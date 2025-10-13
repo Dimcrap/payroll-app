@@ -26,12 +26,16 @@ public:
     void backupdb(const QString &backupFilePath);
     int adduserdata(const Userdata &userdatas);
     bool addusertaxes(taxdetails & usertax);
+    bool deleteEmployee(int Id);
+    bool openDatabase();
 
     signals:
     void allemployeesloaded(const QVector<employeeOutput> &employees,const QString &error="");
 private:
-
     QSqlDatabase m_db;
+    int m_deleteCounter=0;
+    const int BACKUP_THRESHOLD=5;
+    QString generateBackupPath();
 
 };
 

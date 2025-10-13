@@ -8,6 +8,7 @@
 allemployees::allemployees(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::allemployees)
+    ,m_dbhandler(nullptr)
 {
     ui->setupUi(this);
     setWindowTitle("All Employees");
@@ -25,25 +26,36 @@ allemployees::allemployees(QWidget *parent)
     setCentralWidget(scrollArea);
 
 
-    m_dbhandler=new DatabaseHandler("data/payroll.db");
-
-    connect(m_dbhandler,&DatabaseHandler::allemployeesloaded,
-            this ,&allemployees::handleEmployeesLoaded);
-
-    m_dbhandler->loadallEmployees();
-
 }
 
 allemployees::~allemployees()
 {
     delete ui;
-    delete m_dbhandler;
 }
 
+void allemployees::refreshEmployees()
+{
+
+    if(m_dbhandler){
+        m_dbhandler->loadallEmployees();
+    }else{
+        qWarning()<<"Could't refresh employees!";
+    }
+
+}
+
+void allemployees::setDatabseHandler(std::shared_ptr <DatabaseHandler> handler){
+    m_dbhandler=handler;
+
+    if(m_dbhandler){
+        connect(m_dbhandler.get(),&DatabaseHandler::allemployeesloaded,
+                this ,&allemployees::handleEmployeesLoaded);
+    }
+    m_dbhandler->loadallEmployees();
+}
 
 void allemployees::handleEmployeesLoaded(const QVector<employeeOutput> &employees,
                                          const QString &error){
-
 
     if(!m_layout||!m_layout->parent()){
         qCritical()<<"Layout is null!";
@@ -68,23 +80,23 @@ void allemployees::handleEmployeesLoaded(const QVector<employeeOutput> &employee
 
     if(employees.empty()){
 
-    employeeOutput emptyForm;  
-    emptyForm.id="0";
-    emptyForm.name="";
-    emptyForm.gender="";
-    emptyForm.marital=" ";
-    emptyForm.pos=" ";
-    emptyForm.phone=" ";
-    emptyForm.salarytype=" ";
-    emptyForm.salaryAmount=0;
-    emptyForm.birthdate=" ";
-    emptyForm.hiredate=" ";
-    emptyForm.tax="%";
+        employeeOutput emptyForm;
+        emptyForm.id="0";
+        emptyForm.name="";
+        emptyForm.gender="";
+        emptyForm.marital=" ";
+        emptyForm.pos=" ";
+        emptyForm.phone=" ";
+        emptyForm.salarytype=" ";
+        emptyForm.salaryAmount=0;
+        emptyForm.birthdate=" ";
+        emptyForm.hiredate=" ";
+        emptyForm.tax="%";
 
-    employeeinfobox *emptyinfobox=new employeeinfobox(emptyForm);
-    m_layout->addWidget(emptyinfobox);
+        employeeinfobox *emptyinfobox=new employeeinfobox(emptyForm);
+        m_layout->addWidget(emptyinfobox);
 
-    qInfo()<<"no employee founded";
+        qInfo()<<"no employee founded";
 
     }else{
 
@@ -95,4 +107,12 @@ void allemployees::handleEmployeesLoaded(const QVector<employeeOutput> &employee
     };
 
     m_layout->addStretch();
+}
+
+void allemployees::showEvent(QShowEvent *event)
+{
+
+    QMainWindow::showEvent(event);
+
+    refreshEmployees();
 }

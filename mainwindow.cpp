@@ -29,7 +29,31 @@ MainWindow::MainWindow(QWidget *parent)
 
     setMinimumSize(800,600);
 
-    setupConnections();
+    QString projectRoot=QDir::currentPath();
+
+    projectRoot=QDir(projectRoot).absoluteFilePath("../..");
+    QString dbPath=QDir(projectRoot).absoluteFilePath("data/payroll.db");
+
+    QFileInfo dbFile(dbPath);
+    if(!dbFile.exists()){
+        qCritical()<<"Database file not found at:"<<dbPath;
+        return;
+    };
+
+    qDebug()<<"Using database at:"<<dbPath;
+
+
+    auto dbHandler=std::make_shared<DatabaseHandler>(dbPath);
+    if (!dbHandler->isOpen()){
+        qCritical()<<"failed to open database!";
+        return;
+    };
+
+    m_dbhandler=dbHandler;
+
+    m_addemployeewindow  =new addemployeewindow(this);
+    m_addemployeewindow->setDataBaseHandler(getDatabasehandler());
+
 
     QVBoxLayout *leftlayout=new QVBoxLayout(ui->leftwidget);
     animatedrectwidget *animatedWidget=new animatedrectwidget(this);
@@ -40,7 +64,7 @@ MainWindow::MainWindow(QWidget *parent)
     QStackedWidget *stackedWidget = new QStackedWidget(this);
     stackedWidget->addWidget(orginalCenteralWidget);
 
-    m_addemployeewindow  =new addemployeewindow(this);
+
     stackedWidget->addWidget(m_addemployeewindow);
     setCentralWidget(stackedWidget);
 
@@ -59,29 +83,30 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_addemployeewindow,&addemployeewindow::backToMain,this,[stackedWidget](){
         stackedWidget->setCurrentIndex(0);
     });
-    QPushButton *viewEmployeesButton=findChild<QPushButton*>("viewEmployeesButton");
 
-    if (viewEmployeesButton) {
-        connect(viewEmployeesButton, &QPushButton::clicked,
-              this, &MainWindow::onViewEmployeeClicked);
-    } else {
-        qDebug() << "Button not found! Check the object name.";
-    };
+    QPushButton *viewEmployeesButton=findChild<QPushButton*>("viewEmployeesButton");
+    if(!viewEmployeesButton){
+        qCritical()<<"employees button not found!";
+        return;
+    }
+    connect(viewEmployeesButton,&QPushButton::clicked,
+         this,&MainWindow::onViewEmployeeClicked);
 
 }
+
+
+std::shared_ptr<DatabaseHandler> MainWindow::getDatabasehandler(){
+    return m_dbhandler;
+}
+
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-void MainWindow::setupConnections()
-{
 
-    connect(ui->viewEmployeesButton,&QPushButton::clicked,
-            this,&MainWindow::onViewEmployeeClicked);
 
-}
 
 void MainWindow::onAddEmployeeClicked()
 {
@@ -97,6 +122,7 @@ void MainWindow::onViewEmployeeClicked()
 {
     if (!m_allemployeeswindow) {
         m_allemployeeswindow = new allemployees(this);
+        m_allemployeeswindow->setDatabseHandler(getDatabasehandler());
     }
 
     m_allemployeeswindow->show();

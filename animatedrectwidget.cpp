@@ -134,6 +134,7 @@ void animatedrectwidget::startAnimation()
     m_timer->start(6);
 }
 
+
 void animatedrectwidget::stopAnimation()
 {
     m_timer->stop();
@@ -141,21 +142,20 @@ void animatedrectwidget::stopAnimation()
     update();
 }
 
+
 void animatedrectwidget::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
 
-    int xPos=300;
+    int xPos=280;
     qDebug()<<"Resize event - Width:"<<width()<<"height:"<<height();
-    if(width()>600&&height()>700){
-
-        m_mainRectPosition=QPoint (xPos,270);
-
+    if(width()>500&&height()>650){
+        m_mainRectPosition=QPoint (xPos,250);
     }else{
         m_mainRectPosition =QPoint(100,160);
     };
-
     update();
+
 
 }
 

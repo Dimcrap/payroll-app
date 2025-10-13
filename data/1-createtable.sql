@@ -23,7 +23,7 @@ employee_id INTEGER PRIMARY KEY AUTOINCREMENT,
 emoployer_cost NUMERIC NOT NULL,
 social NUMERIC,
 medicare NUMERIC,
-FOREIGN KEY(employee_id) REFERENCES employee(ID)
+FOREIGN KEY(employee_id) REFERENCES employee(ID) ON DELETE CASCADE
 );
 
 

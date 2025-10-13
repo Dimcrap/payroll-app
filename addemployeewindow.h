@@ -19,15 +19,16 @@ class addemployeewindow : public QMainWindow
 public:
     explicit addemployeewindow(QWidget *parent = nullptr);
     ~addemployeewindow();
+    void setDataBaseHandler(std::shared_ptr<DatabaseHandler> handler);
     Userdata Userinputs();
     void inputError(QString errormsg);
-
+    void showEvent(QShowEvent *event) override;
 private:
 
     Ui::addemployeewindow *ui;
     QList<QRadioButton*> genders,maritalsradios
         ,positions,salaryTypes;
-    std::unique_ptr <DatabaseHandler> m_dbhandler;
+    std::shared_ptr <DatabaseHandler> m_dbhandler;
     void cleanInputs();
 
 
@@ -38,6 +39,7 @@ private slots:
     void onBackButtonClicked();
     void onEraseButtonClicked();
     void onAddButtonClicked();
+
 };
 
 #endif // ADDEMPLOYEEWINDOW_H

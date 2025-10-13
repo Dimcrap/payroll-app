@@ -31,14 +31,14 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
+    std::shared_ptr<DatabaseHandler> m_dbhandler;
     addemployeewindow *m_addemployeewindow;
     allemployees * m_allemployeeswindow;
 
-    void setupConnections();
-
     QStackedWidget *stackWidget;
     QWidget *mainPage;
-
+public:
+    std::shared_ptr<DatabaseHandler> getDatabasehandler();
 
 protected:
     void keyPressEvent(QKeyEvent * event) override;

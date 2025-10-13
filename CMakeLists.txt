@@ -57,13 +57,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
     )
 
-  add_custom_command(TARGET payroll-system POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_directory
-      ${CMAKE_CURRENT_SOURCE_DIR}/data
-      $<TARGET_FILE_DIR:payroll-system>/data
-      COMMENT "Copying data directory to build folder"
-  )
-
 add_custom_command(TARGET payroll-system POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_CURRENT_SOURCE_DIR}/styles
