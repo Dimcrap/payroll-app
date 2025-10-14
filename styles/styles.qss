@@ -4,6 +4,10 @@ QMainWindow{
     font-family:"Segoe UI", Arial, sans-serif;
 }
 
+QDoubleSpinBox{
+min-height:25px;
+font-size:13px;
+}
 QPushButton#backToMain
 {
 min-width:50px;
@@ -51,8 +55,25 @@ QLabel#label_9{
     font-size: 18px;
     font-weight: bold;
     margin-top:15px;
-    text-align:center;
+    min-height:22px;
     qproperty-alignment:'AlignCenter';
+}
+
+QLabel#label_10{
+qproperty-alignment:'AlignLeft';
+min-height:18px;
+}
+
+
+
+QLabel#label_11{
+qproperty-alignment:'AlignLeft';
+min-height:18px;
+}
+
+QLabel#label_12{
+qproperty-alignment:'AlignLeft';
+min-height:18px;
 }
 
 QLabel {
@@ -61,14 +82,17 @@ background: #f5f5f5;
 border-radius: 3px;
 min-width: 50px;
 min-height:10px;
+font-size: 13px;
+qproperty-alignment:'AlignCenter';
 };
 
+QGroupBox#positonGroupBox{
+
+}
 QGroupBox#groupBox
 {
-padding: 100px;
+padding: px;
 max-heigt:12px
 };
-
-
 
 

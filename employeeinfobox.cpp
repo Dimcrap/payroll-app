@@ -16,6 +16,9 @@ employeeinfobox::employeeinfobox(const employeeOutput &employee,QWidget *parent)
 
     QFormLayout *layout=new QFormLayout(this);
     layout->setVerticalSpacing(8);
+
+    this->setStyleSheet("QLabel {min-height:25px;font-size:14px;border-radius:6px}");
+
     QLabel *genderLabel =new  QLabel(employee.gender);
     QLabel *maritalLabel =new  QLabel(employee.marital);
     QLabel *birthLabel  =new   QLabel(employee.birthdate);
@@ -35,7 +38,12 @@ employeeinfobox::employeeinfobox(const employeeOutput &employee,QWidget *parent)
 
     QPushButton *deletebtn=new QPushButton("Delete");
     deletebtn->setStyleSheet("padding:1px;max-width:100px;min-height:30px;min-width:80px");
+    connect(deletebtn,&QPushButton::clicked,this,[this,employee](){
+        qDebug()<<"Delete button clicked for employee:"<<employee.id;
+        emit deleterequest(employee.id);
+    });
     layout->addWidget(deletebtn);
+
     layout->setAlignment(deletebtn,Qt::AlignRight);
     layout->addRow("Gender:",genderLabel);
     layout->addRow("Marital Status:",maritalLabel);
@@ -46,6 +54,7 @@ employeeinfobox::employeeinfobox(const employeeOutput &employee,QWidget *parent)
     layout->addRow("Salary form:",salarytypeLabel);
     layout->addRow("Salary anmount:",salaryLabel);
     layout->addRow("Tax amount: %",taxLabel);
+
 
     this->update();
     this->setLayout(layout);

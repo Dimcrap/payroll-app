@@ -28,6 +28,7 @@ public:
     bool addusertaxes(taxdetails & usertax);
     bool deleteEmployee(int Id);
     bool openDatabase();
+    bool yesnoDialog(QString request);
 
     signals:
     void allemployeesloaded(const QVector<employeeOutput> &employees,const QString &error="");

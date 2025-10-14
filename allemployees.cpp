@@ -9,6 +9,7 @@ allemployees::allemployees(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::allemployees)
     ,m_dbhandler(nullptr)
+    ,m_infobox(new employeeinfobox(emptyInfobox()))
 {
     ui->setupUi(this);
     setWindowTitle("All Employees");
@@ -24,7 +25,6 @@ allemployees::allemployees(QWidget *parent)
     scrollArea->setWidget(scrollwidget);
     scrollArea->setWidgetResizable(true);
     setCentralWidget(scrollArea);
-
 
 }
 
@@ -54,6 +54,24 @@ void allemployees::setDatabseHandler(std::shared_ptr <DatabaseHandler> handler){
     m_dbhandler->loadallEmployees();
 }
 
+employeeOutput allemployees::emptyInfobox()
+{
+    employeeOutput emptyForm;
+    emptyForm.id="0";
+    emptyForm.name="";
+    emptyForm.gender="";
+    emptyForm.marital=" ";
+    emptyForm.pos=" ";
+    emptyForm.phone=" ";
+    emptyForm.salarytype=" ";
+    emptyForm.salaryAmount=0;
+    emptyForm.birthdate=" ";
+    emptyForm.hiredate=" ";
+    emptyForm.tax="%";
+
+    return emptyForm;
+}
+
 void allemployees::handleEmployeesLoaded(const QVector<employeeOutput> &employees,
                                          const QString &error){
 
@@ -72,7 +90,6 @@ void allemployees::handleEmployeesLoaded(const QVector<employeeOutput> &employee
         delete item;
     }
 
-
     if(!error.isEmpty()){
         qCritical()<<error;
         return;
@@ -80,33 +97,43 @@ void allemployees::handleEmployeesLoaded(const QVector<employeeOutput> &employee
 
     if(employees.empty()){
 
-        employeeOutput emptyForm;
-        emptyForm.id="0";
-        emptyForm.name="";
-        emptyForm.gender="";
-        emptyForm.marital=" ";
-        emptyForm.pos=" ";
-        emptyForm.phone=" ";
-        emptyForm.salarytype=" ";
-        emptyForm.salaryAmount=0;
-        emptyForm.birthdate=" ";
-        emptyForm.hiredate=" ";
-        emptyForm.tax="%";
-
-        employeeinfobox *emptyinfobox=new employeeinfobox(emptyForm);
-        m_layout->addWidget(emptyinfobox);
+        m_infobox=new employeeinfobox(emptyInfobox());
+        m_layout->addWidget(m_infobox);
 
         qInfo()<<"no employee founded";
 
     }else{
 
         for(const employeeOutput & emp:employees){
-            employeeinfobox *infobox=new employeeinfobox(emp);
-            m_layout->addWidget(infobox);
+            m_infobox=new employeeinfobox(emp);
+            connect(m_infobox,&employeeinfobox::deleterequest,this,&allemployees::handleEmployeeDelete);
+            m_layout->addWidget(m_infobox);
         };
     };
 
     m_layout->addStretch();
+}
+
+void allemployees::handleEmployeeDelete(QString empID)
+{
+    bool confirm=m_dbhandler->yesnoDialog("Delete employee");
+    if(confirm){
+        int Id=empID.toInt();
+        if(Id==0){
+            qCritical()<<"could't delete employee";
+            return;
+        };
+
+        if(!m_dbhandler->deleteEmployee(Id)){
+            qCritical()<<"Failed to delete";
+            return;
+        };
+        refreshEmployees();
+        qInfo()<<"Employee deleted!";
+
+    }else{
+        return;
+    };
 }
 
 void allemployees::showEvent(QShowEvent *event)

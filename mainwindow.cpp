@@ -248,4 +248,5 @@ void GlobalErrorHandler::showGlobalPopup(QtMsgType type,const QString &msg){
     dialog.setMinimumSize(350,170);
 
     dialog.exec();
+
 }

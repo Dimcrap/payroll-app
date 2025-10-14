@@ -6,7 +6,12 @@
 #include <QCoreApplication>
 #include <QFileInfo>
 #include <QSettings>
-
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QMessageBox>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QStyle>
 
 DatabaseHandler::DatabaseHandler(const QString &pathtodb,QObject *parent):
     QObject(parent){
@@ -66,9 +71,9 @@ DatabaseHandler::DatabaseHandler(const QString &pathtodb,QObject *parent):
     }
 
 
+    /*
     qDebug() << "=== DATABASE PATH DEBUG ===";
 
-    // Get absolute path
     QFileInfo fileInfo(pathtodb);
     QString absolutePath = fileInfo.absoluteFilePath();
     qDebug() << "Requested path:" << pathtodb;
@@ -77,15 +82,15 @@ DatabaseHandler::DatabaseHandler(const QString &pathtodb,QObject *parent):
     qDebug() << "File is writable:" << QFileInfo(absolutePath).isWritable();
     qDebug() << "Current directory:" << QDir::currentPath();
 
-
     QSqlQuery fileQuery(m_db);
     if(fileQuery.exec("PRAGMA database_list;")) {
         while(fileQuery.next()) {
             qDebug() << "Database file:" << fileQuery.value(2).toString();
         }
     }
+*/
 
-    // Enable foreign keys
+
     QSqlQuery fkQuery(m_db);
     if(fkQuery.exec("PRAGMA foreign_keys = ON;")) {
         qDebug() << "Foreign keys enabled";
@@ -93,7 +98,7 @@ DatabaseHandler::DatabaseHandler(const QString &pathtodb,QObject *parent):
         qCritical() << "Failed to enable foreign keys:" << fkQuery.lastError();
     }
 
-    qDebug() << "=================================";
+
 
 }
 
@@ -181,7 +186,7 @@ bool DatabaseHandler::isOpen() const{
 
 int DatabaseHandler::adduserdata(const Userdata &userdatas){
     QSqlQuery query(m_db);
-
+/*
     qDebug() << "=== User Data Debug ===";
     qDebug() << "Name:" << userdatas.name;
     qDebug() << "Gender:" << userdatas.gender;
@@ -199,7 +204,7 @@ int DatabaseHandler::adduserdata(const Userdata &userdatas){
     qDebug() << "Database open?" << m_db.isOpen();
     qDebug() << "Database valid?" << m_db.isValid();
     qDebug() << "Last error:" << m_db.lastError();
-
+*/
 
     query.prepare("INSERT INTO employee (name,gender,marital_status,"
                   "position,phone,salaryform,salaryamount,birth_date,hire_date) "
@@ -291,7 +296,8 @@ bool DatabaseHandler::deleteEmployee(int Id)
     int deleteCount=settings.value("delete_counter",0).toInt();
 
 
-    query.prepare( "DELETE FROME employee WHERE ID = :id ");
+    query.prepare( "DELETE FROM"
+                  " employee WHERE ID = :id ");
     query.bindValue(":id",Id);
 
     if(!query.exec()){
@@ -325,6 +331,74 @@ bool DatabaseHandler::openDatabase()
         return false;
     }
     return true;
+}
+bool DatabaseHandler::yesnoDialog(QString request)
+{
+
+    QDialog dialog;
+    dialog.setWindowTitle("Warning");
+    QVBoxLayout *boxlayout=new QVBoxLayout(&dialog);
+    dialog.setStyleSheet("{QDialog { background-color:#d0d8d9;}");
+    QLabel *iconlabel=new QLabel();
+    QStyle::StandardPixmap icon=QStyle::SP_MessageBoxWarning;
+
+    QPixmap pixmap=dialog.style()->standardIcon(icon).pixmap(20,20);
+    iconlabel->setPixmap(pixmap);
+    iconlabel->setAlignment(Qt::AlignCenter);
+    iconlabel->setFixedSize(40, 40);
+    iconlabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    iconlabel->setStyleSheet("{QLabel { background-color:#d0d8d9;}");
+
+    QLabel *messagelabel=new QLabel(request+"?");
+    messagelabel->setWordWrap(true);
+    messagelabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    QFont messagefont=messagelabel->font();
+    messagefont.setPointSize(11);
+    messagelabel->setFont(messagefont);
+    messagelabel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
+
+
+    QDialogButtonBox *btnBox=new QDialogButtonBox(QDialogButtonBox::Yes|QDialogButtonBox::No);
+
+    btnBox->setCenterButtons(true);
+
+    btnBox->setStyleSheet(
+        "QDialogButtonBox {"
+        "    background-color:#cacfce;"
+        "    min-width:80px;"
+        "    margin:1px;"
+        "    max-height:35px;"
+        "}"
+        "QPushButton {"
+        "    background-color:#cacfce;"
+        "    min-width:80px;"
+        "   max-height:35px;"
+        "    font-size: 10px;"
+        "   padding:0px;"
+
+        "}");
+
+    connect(btnBox,QDialogButtonBox::accepted,&dialog,&QDialog::accept);
+    connect(btnBox,QDialogButtonBox::rejected,&dialog,&QDialog::reject);
+
+    QWidget *contents=new QWidget();
+    contents->setStyleSheet("QWidget { background-color: #e6eded; }");
+    contents->setFixedSize(330,70);
+    QHBoxLayout *contentsBoxlayout=new QHBoxLayout(contents);
+
+    contentsBoxlayout->addWidget(iconlabel);
+    contentsBoxlayout->addWidget(messagelabel);
+
+    boxlayout->addWidget(contents);
+    boxlayout->addWidget(btnBox);
+
+
+    dialog.resize(350,170);
+    dialog.setMinimumSize(350,170);
+
+    int result=dialog.exec();
+
+    return(result==QDialog::Accepted);
 }
 
 
