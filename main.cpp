@@ -5,6 +5,7 @@
 #include <QLocale>
 #include <QTranslator>
 #include <QFile>
+#include <QIcon>
 
 int main(int argc, char *argv[])
 {
@@ -12,6 +13,12 @@ int main(int argc, char *argv[])
 
     GlobalErrorHandler::install();
 
+    QString projectRoot=QDir::currentPath();
+
+    projectRoot=QDir(projectRoot).absoluteFilePath("../..");
+    QString iconpath=QDir(projectRoot).absoluteFilePath("images/icons8-bank-cards-100.png");
+
+    a.setWindowIcon(QIcon(iconpath));
 
     QString sourceDir="C:/programming/cpp/C++/exercise p/payroll-system/";
     QFile stylefile(sourceDir+"/styles/styles.qss");
@@ -38,3 +45,11 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
 }
+
+
+
+
+
+
+
+

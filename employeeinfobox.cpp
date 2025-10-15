@@ -29,12 +29,19 @@ employeeinfobox::employeeinfobox(const employeeOutput &employee,QWidget *parent)
     QLabel *salaryLabel =new QLabel(QString::number(employee.salaryAmount));
     QLabel *taxLabel  =new  QLabel(employee.tax);
 
-
-
-    QList<QLabel*> labels={genderLabel,maritalLabel,birthLabel
-    ,phoneLabel ,positionLabel,   hiredateLaber ,   salarytypeLabel
-                            , salaryLabel,      taxLabel
-    };
+    bool ok;
+    double salary=employee.salaryAmount;
+    QString taxStr=employee.tax;
+    taxStr.remove('%');
+    taxStr=taxStr.trimmed();
+    double tax=taxStr.toDouble(&ok);
+    if (!ok) {
+        qDebug() << "Error: Could not convert tax value:" << employee.tax;
+        // Handle error - maybe use a default value
+    }
+    double taxMultiplier=(tax>1.0)?(tax/100.0):tax;
+    double payresult= salary-(salary*taxMultiplier);
+    QLabel *finalPay=new QLabel(QString::number(payresult));
 
     QPushButton *deletebtn=new QPushButton("Delete");
     deletebtn->setStyleSheet("padding:1px;max-width:100px;min-height:30px;min-width:80px");
@@ -52,9 +59,9 @@ employeeinfobox::employeeinfobox(const employeeOutput &employee,QWidget *parent)
     layout->addRow("Job position:",positionLabel);
     layout->addRow("Hire date:",hiredateLaber);
     layout->addRow("Salary form:",salarytypeLabel);
-    layout->addRow("Salary anmount:",salaryLabel);
+    layout->addRow("Salary amount:",salaryLabel);
     layout->addRow("Tax amount: %",taxLabel);
-
+    layout->addRow("Pay:",finalPay);
 
     this->update();
     this->setLayout(layout);

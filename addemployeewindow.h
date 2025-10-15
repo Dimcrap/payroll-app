@@ -30,7 +30,7 @@ private:
         ,positions,salaryTypes;
     std::shared_ptr <DatabaseHandler> m_dbhandler;
     void cleanInputs();
-
+    void setStyles();
 
 signals:
     void backToMain();

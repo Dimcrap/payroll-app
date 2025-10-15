@@ -16,19 +16,14 @@ addemployeewindow::addemployeewindow(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle("Add New Employee");
-    setMinimumSize(700,380);
+    setMinimumSize(710,380);
     setWindowFlag(Qt::Window);
 
     ui->fram1->setMinimumWidth(160);
     ui->phoneNumber->setValidator(new QIntValidator(this));
     ui->Salaryamount->setValidator(new QIntValidator(this));
-    ui->genderGroupBox->setStyleSheet("max-height:30px;");
-    ui->maritalGroupBox->setStyleSheet("max-height:30px;");
-    ui->positonGroupBox->setStyleSheet("max-height:80px;padding-bottom:1px");
-    ui->radioButton_7->setStyleSheet("margin-left:15px");
-    ui->radioButton_10->setStyleSheet("margin-left:20px");
-    ui->salarytypeGroupBox->setStyleSheet("padding:1px;max-height:35px");
-    ui->label_13->setMaximumWidth(20);
+
+    setStyles();
 
     connect(ui->backToMain,&QPushButton::clicked,
     this,&addemployeewindow::onBackButtonClicked);
@@ -93,7 +88,7 @@ void addemployeewindow::cleanInputs(){
     }
 
     QList<QGroupBox*> groupboxes={
-                                     ui->genderGroupBox,
+        ui->genderGroupBox,
         ui->maritalGroupBox,
         ui->positonGroupBox,
         ui->salarytypeGroupBox
@@ -105,17 +100,38 @@ void addemployeewindow::cleanInputs(){
     radiobuttons.append(ui->positonGroupBox->findChildren<QRadioButton *>() );
     radiobuttons.append(ui->salarytypeGroupBox->findChildren<QRadioButton *>());
 
-    for (QRadioButton *radiobutton:radiobuttons){
-        radiobutton->setAutoExclusive(false);
-    }
+
         for (QRadioButton *radiobutton:radiobuttons){
         radiobutton->setAutoExclusive(false);
         radiobutton->setChecked(false);
-    }
+        radiobutton->setAutoExclusive(true);
+        }
 
-        for (QRadioButton *radiobutton:radiobuttons){
-            radiobutton->setAutoExclusive(false);
-        };
+
+}
+
+void addemployeewindow::setStyles()
+{
+    ui->genderGroupBox->setStyleSheet("max-height:30px;");
+    ui->maritalGroupBox->setStyleSheet("max-height:30px;");
+    ui->positonGroupBox->setMinimumHeight(70);
+    ui->positonGroupBox->setMaximumHeight(90);
+    ui->positonGroupBox->setStyleSheet(
+        "QGroupBox{"
+        "border: 0px;"
+        "margin-bottom:4px;"
+        "}"
+        "QGroupBox::title{"
+        "subcontrol-origin: margin;"
+        "padding: 0px 1px;"
+        "bottom: 6px;"
+        "}"
+        );
+    ui->radioButton_6->setStyleSheet("margin-left:15px;");
+    ui->radioButton_7->setStyleSheet("margin-left:35px");
+    ui->radioButton_10->setStyleSheet("margin-left:20px");
+    ui->salarytypeGroupBox->setStyleSheet("padding:1px;max-height:30px");
+    ui->label_13->setMaximumWidth(20);
 }
 
 void addemployeewindow::onEraseButtonClicked()

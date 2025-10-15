@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>images/icons8-bank-cards-100.png</file>
+        <file>images/icons8-bank-cards-100.ico</file>
+        <file>images/icons8-bank-cards-100.icns</file> <!-- For macOS -->
+    </qresource>
+</RCC>
